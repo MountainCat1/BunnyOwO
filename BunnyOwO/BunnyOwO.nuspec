@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>BunnyOwO</id>
+    <version>1.0.3</version>
+    <title>BunnyOwO</title>
+    <authors>Tomasz Banaś</authors>
+    <license type="expression">AGPL-3.0-or-later</license>
+    <!-- <icon>icon.png</icon> -->
+    <projectUrl>https://github.com/MountainCat1/BunnyOwO</projectUrl>
+    <repository type="git" url="https://github.com/MountainCat1/BunnyOwO"/>
+    <description>Package that makes using RabbitMQ smooth and simple! ^^</description>
+    <releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
+    <copyright>Developed and owned by Tomasz Banaś</copyright>
+    <tags>RabbitMQ</tags>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+
+    <dependencies>
+      <dependency id="Microsoft.Extensions.Hosting" version="6.0.1" />
+      <dependency id="Microsoft.Extensions.Logging" version="6.0.0" />
+      <dependency id="RabbitMQ.Client" version="6.4.0" />
+    </dependencies>
+    
+  </metadata>
+</package>

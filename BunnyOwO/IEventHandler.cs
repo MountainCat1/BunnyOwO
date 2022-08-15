@@ -3,7 +3,11 @@
 namespace BunnyOwO;
 
 public interface IEventHandler
-{    public void ConfigureReceiver(IReceiver receiver);
+{
+    public virtual void ConfigureReceiver(IReceiver receiver)
+    {
+        // Intentionally empty
+    }
 }
 public interface IEventHandler<in TEvent> : IEventHandler
     where TEvent : class, IEvent

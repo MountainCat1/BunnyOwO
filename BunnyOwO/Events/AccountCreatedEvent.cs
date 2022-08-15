@@ -1,4 +1,6 @@
-﻿namespace BunnyOwO.Events;
+﻿using System;
+
+namespace BunnyOwO.Events;
 
 public class AccountCreatedEvent : IEvent
 {

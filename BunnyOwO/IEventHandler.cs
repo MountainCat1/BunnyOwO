@@ -1,4 +1,6 @@
-﻿namespace BunnyOwO;
+﻿using System.Threading.Tasks;
+
+namespace BunnyOwO;
 
 public interface IEventHandler
 {    public void ConfigureReceiver(IReceiver receiver);

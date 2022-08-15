@@ -2,11 +2,11 @@
 
 namespace BunnyOwO.Extensions;
 
-public static class SenderExtensions
+public static class EventSenderExtensions
 {
     public static IServiceCollection AddSender(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddScoped<ISender, Sender>();
+        serviceCollection.AddScoped<ISender, EventSender>();
         return serviceCollection;
     }
 }

@@ -13,30 +13,30 @@ using RabbitMQ.Client.Events;
 namespace BunnyOwO;
 
 
-public interface IReceiver : IHostedService
+public interface IEventReceiver : IHostedService
 {
     string QueueName { get; set; }
     Task<bool> ProcessAsync(string message);
     void Register();
     void DeRegister();
 }
-public interface IReceiver<TEvent> : IReceiver
+public interface IEventReceiver<TEvent> : IEventReceiver
     where TEvent : IEvent
 {
 }
 
-public class Receiver<TEvent> : IReceiver<TEvent> 
+public class EventReceiver<TEvent> : IEventReceiver<TEvent> 
     where TEvent : class, IEvent
 {
     private readonly IConnection _connection;
     private readonly IModel _channel;
     
-    private readonly ILogger<Receiver<TEvent> > _logger;
+    private readonly ILogger<EventReceiver<TEvent> > _logger;
     private readonly IEventHandler<TEvent> _eventHandler;
 
-    public Receiver(
+    public EventReceiver(
         IOptions<RabbitMQConfiguration> rabbitMqConfiguration, 
-        ILogger<Receiver<TEvent>> logger,
+        ILogger<EventReceiver<TEvent>> logger,
         IEventHandler<TEvent> eventHandler)
     {
         _logger = logger;
@@ -64,6 +64,8 @@ public class Receiver<TEvent> : IReceiver<TEvent>
     // How to process messages
     public virtual async Task<bool> ProcessAsync(string message)
     {
+        _logger.LogInformation($"Receiving message: {message}");
+        
         TEvent? @event = JsonSerializer.Deserialize<TEvent>(message);
 
         if (@event == null)

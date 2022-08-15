@@ -4,7 +4,7 @@ namespace BunnyOwO;
 
 public interface IEventHandler
 {
-    public virtual void ConfigureReceiver(IReceiver receiver)
+    public virtual void ConfigureReceiver(IEventReceiver eventReceiver)
     {
         // Intentionally empty
     }

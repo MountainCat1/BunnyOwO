@@ -5,11 +5,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace BunnyOwO.Extensions;
 
-public static class RabbitMQReceiverExtensions
+public static class EventReceiverExtensions
 {
     public static IServiceCollection AddRabbitMqReceiver<T>(this IServiceCollection services,
         Action<T> configure)
-        where T : class, IReceiver
+        where T : class, IEventReceiver
     {
         services.AddHostedService(provider =>
         {
@@ -54,9 +54,9 @@ public static class RabbitMQReceiverExtensions
             if (eventType is null)
                 throw new NullReferenceException($"Could not find event type for {eventHandlerType.Name}");
 
-            var receiverType = typeof(Receiver<>).MakeGenericType(eventType);
+            var receiverType = typeof(EventReceiver<>).MakeGenericType(eventType);
 
-            Action<IReceiver> configureAction;
+            Action<IEventReceiver> configureAction;
             using (var scope = provider.CreateScope())
             {
                 var eventHandlerInterfaceType = eventHandlerType.GetInterfaces()
@@ -66,7 +66,7 @@ public static class RabbitMQReceiverExtensions
                     .ConfigureReceiver;
             }
 
-            MethodInfo method = typeof(RabbitMQReceiverExtensions)
+            MethodInfo method = typeof(EventReceiverExtensions)
                 .GetMethod(nameof(AddReceiverHostedService), BindingFlags.Static | BindingFlags.Public)!;
 
             InvokeGenericMethod(method, receiverType, services, configureAction);
@@ -81,7 +81,7 @@ public static class RabbitMQReceiverExtensions
     }
     
     public static void AddReceiverHostedService<T>(IServiceCollection services, Action<T>? configure = null)
-        where T : class, IReceiver
+        where T : class, IEventReceiver
     {
         services.AddHostedService(provider =>
         {

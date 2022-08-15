@@ -12,14 +12,14 @@ public interface ISender
     void PublishMessage(string routingKey, object message);
 }
 
-public class Sender : ISender
+public class EventSender : ISender
 {
     private readonly RabbitMQConfiguration _rabbitMqConfiguration;
-    private readonly ILogger<Sender> _logger;
+    private readonly ILogger<EventSender> _logger;
     
     private readonly IModel _channel;
 
-    public Sender(IOptions<RabbitMQConfiguration> rabbitMqConfiguration, ILogger<Sender> logger)
+    public EventSender(IOptions<RabbitMQConfiguration> rabbitMqConfiguration, ILogger<EventSender> logger)
     {
         _rabbitMqConfiguration = rabbitMqConfiguration.Value;
         _logger = logger;
@@ -35,6 +35,9 @@ public class Sender : ISender
             };
             var connection = factory.CreateConnection();
             _channel = connection.CreateModel();
+            
+            if(_channel is null)
+                _logger.LogError("Failed to instantiate channel");
         }
         catch (Exception ex)
         {
@@ -45,6 +48,9 @@ public class Sender : ISender
 
     public virtual void PublishMessage(string routingKey, object message)
     {
+        if(_channel is null)
+            _logger.LogError("Failed to instantiate channel");
+        
         _logger.LogInformation($"Publishing RabbitMQ message with routing key: {routingKey}...");
 
         string msgJson = JsonSerializer.Serialize(message);

@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>BunnyOwO.FluentValidation</id>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
     <title>BunnyOwO.FluentValidation</title>
     <authors>Tomasz Banaś</authors>
     <license type="expression">AGPL-3.0-or-later</license>
@@ -16,7 +16,7 @@
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
 
     <dependencies>
-      <dependency id="BunnyOwO" version="1.0.16" />
+      <dependency id="BunnyOwO" version="1.0.17" />
       <dependency id="FluentValidation" version="11.2.0" />
     </dependencies>
 

@@ -5,7 +5,7 @@
     <version>1.0.18</version>
     <title>BunnyOwO</title>
     <authors>Tomasz Banaś</authors>
-    <license type="expression">AGPL-3.0-or-later</license>
+    <license type="expression">Apache-2.0</license>
     <!-- <icon>icon.png</icon> -->
     <projectUrl>https://github.com/MountainCat1/BunnyOwO</projectUrl>
     <repository type="git" url="https://github.com/MountainCat1/BunnyOwO"/>

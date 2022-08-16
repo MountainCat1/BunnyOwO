@@ -14,12 +14,11 @@ public static class DependencyInjectionExtensions
     /// </summary>
     /// <returns></returns>
     public static IServiceCollection AddBunnyOwO(this IServiceCollection serviceCollection,
-        Assembly eventHandlersAssemblyMarker,
-        Assembly eventReceiversAssemblyMarker)
+        Assembly eventHandlersAssemblyMarker)
     {
         serviceCollection.AddSender();
         serviceCollection.AddEventHandlers(eventHandlersAssemblyMarker);
-        serviceCollection.AddEventReceivers(eventReceiversAssemblyMarker);
+        serviceCollection.AddEventReceivers(eventHandlersAssemblyMarker);
         
         return serviceCollection;
     }
@@ -30,12 +29,11 @@ public static class DependencyInjectionExtensions
     /// </summary>
     /// <returns></returns>
     public static IServiceCollection AddBunnyOwO(this IServiceCollection serviceCollection,
-        Type eventHandlersAssemblyMarker,
-        Type eventReceiversAssemblyMarker)
+        Type eventHandlersAssemblyMarker)
     {
         serviceCollection.AddSender();
         serviceCollection.AddEventHandlers(eventHandlersAssemblyMarker.Assembly);
-        serviceCollection.AddEventReceivers(eventReceiversAssemblyMarker.Assembly);
+        serviceCollection.AddEventReceivers(eventHandlersAssemblyMarker.Assembly);
 
         return serviceCollection;
     }
@@ -46,12 +44,11 @@ public static class DependencyInjectionExtensions
     /// </summary>
     /// <returns></returns>
     public static IServiceCollection AddBunnyOwO(this IServiceCollection serviceCollection,
-        IEnumerable<Type> eventHandlersAssemblyMarkers,
-        IEnumerable<Type> eventReceiversAssemblyMarkers)
+        IEnumerable<Type> eventHandlersAssemblyMarkers)
     {
         serviceCollection.AddSender();
         serviceCollection.AddEventHandlers(eventHandlersAssemblyMarkers.Select(type => type.Assembly).ToArray());
-        serviceCollection.AddEventReceivers(eventReceiversAssemblyMarkers.Select(type => type.Assembly).ToArray());
+        serviceCollection.AddEventReceivers(eventHandlersAssemblyMarkers.Select(type => type.Assembly).ToArray());
 
         return serviceCollection;
     }

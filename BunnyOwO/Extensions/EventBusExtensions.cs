@@ -20,9 +20,7 @@ public static class EventBusExtensions
         serviceCollection.AddSender();
         serviceCollection.AddEventHandlers(eventHandlersAssemblyMarker);
         serviceCollection.AddEventReceivers(eventReceiversAssemblyMarker);
-        serviceCollection.AddEventReceivers(eventReceiversAssemblyMarker);
-
-
+        
         return serviceCollection;
     }
     

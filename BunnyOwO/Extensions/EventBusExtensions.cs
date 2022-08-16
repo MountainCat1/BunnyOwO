@@ -8,6 +8,11 @@ namespace BunnyOwO.Extensions;
 
 public static class EventBusExtensions
 {
+    /// <summary>
+    /// Adds sender as well as event handlers and receivers using basic RabbitMq setup,
+    /// requires that <see cref="Configuration.RabbitMQConfiguration" /> is configured
+    /// </summary>
+    /// <returns></returns>
     public static IServiceCollection AddEventBus(this IServiceCollection serviceCollection,
         Assembly eventHandlersAssemblyMarker,
         Assembly eventReceiversAssemblyMarker)
@@ -15,10 +20,17 @@ public static class EventBusExtensions
         serviceCollection.AddSender();
         serviceCollection.AddEventHandlers(eventHandlersAssemblyMarker);
         serviceCollection.AddEventReceivers(eventReceiversAssemblyMarker);
+        serviceCollection.AddEventReceivers(eventReceiversAssemblyMarker);
+
 
         return serviceCollection;
     }
     
+    /// <summary>
+    /// Adds sender as well as event handlers and receivers using basic RabbitMq setup,
+    /// requires that <see cref="Configuration.RabbitMQConfiguration" /> is configured
+    /// </summary>
+    /// <returns></returns>
     public static IServiceCollection AddEventBus(this IServiceCollection serviceCollection,
         Type eventHandlersAssemblyMarker,
         Type eventReceiversAssemblyMarker)
@@ -30,6 +42,11 @@ public static class EventBusExtensions
         return serviceCollection;
     }
     
+    /// <summary>
+    /// Adds sender as well as event handlers and receivers using basic RabbitMq setup,
+    /// requires that <see cref="Configuration.RabbitMQConfiguration" /> is configured
+    /// </summary>
+    /// <returns></returns>
     public static IServiceCollection AddEventBus(this IServiceCollection serviceCollection,
         IEnumerable<Type> eventHandlersAssemblyMarkers,
         IEnumerable<Type> eventReceiversAssemblyMarkers)

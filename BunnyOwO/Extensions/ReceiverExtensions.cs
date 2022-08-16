@@ -7,7 +7,13 @@ namespace BunnyOwO.Extensions;
 
 public static class EventReceiverExtensions
 {
-    public static IServiceCollection AddRabbitMqReceiver<T>(this IServiceCollection services,
+    /// <summary>
+    /// Adds <see cref="IEventReceiver"/> to service collection
+    /// </summary>
+    /// <param name="configure">Method used to configure <see cref="IEventReceiver"/></param>
+    /// <typeparam name="T"><see cref="IEventHandler"/> implementation</typeparam>
+    /// <returns></returns>
+    public static IServiceCollection AddEventReceiver<T>(this IServiceCollection services,
         Action<T> configure)
         where T : class, IEventReceiver
     {
@@ -36,7 +42,7 @@ public static class EventReceiverExtensions
     /// Registers event receivers based on registered event handlers
     /// </summary>
     /// <returns></returns>
-    /// <exception cref="NullReferenceException"></exception>
+    /// <exception cref="NullReferenceException">Event was not found in specified assemblies for found Receiver</exception>
     public static IServiceCollection AddEventReceivers(this IServiceCollection services, params Assembly[] assemblies)
     {
         var provider = services.BuildServiceProvider();

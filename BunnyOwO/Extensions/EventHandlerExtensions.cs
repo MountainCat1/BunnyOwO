@@ -11,7 +11,7 @@ public static class EventHandlerExtensions
     /// Registers all event handlers found in specified assembly
     /// </summary>
     /// <returns></returns>
-    /// <exception cref="NullReferenceException"></exception>
+    /// <exception cref="NullReferenceException">Found event handler doesn't inherit <see cref="IEventHandler"/></exception>
     public static IServiceCollection AddEventHandlers(this IServiceCollection services, params Assembly[] assemblies)
     {
         var eventHandlerTypes = assemblies

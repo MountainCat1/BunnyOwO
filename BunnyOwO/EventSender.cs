@@ -12,6 +12,9 @@ public interface ISender
     void PublishMessage(string routingKey, object message);
 }
 
+/// <summary>
+/// Basic implementation of <see cref="ISender"/>
+/// </summary>
 public class EventSender : ISender
 {
     private readonly RabbitMQConfiguration _rabbitMqConfiguration;

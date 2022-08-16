@@ -17,8 +17,13 @@ public class EventSenderWithFluentValidation : EventSender
 
     public override async Task<bool> ValidateEventAsync<TEvent>(TEvent @event)
     {
-        var validator = _serviceProvider.GetRequiredService<IValidator<TEvent>>();
+        var eventValidator = _serviceProvider.GetService<IValidator<TEvent>>();
 
-        return (await validator.ValidateAsync(@event)).IsValid;
+        if (eventValidator is null)
+            return await base.ValidateEventAsync(@event);
+        
+        return (await eventValidator.ValidateAsync(@event)).IsValid;
     }
+    
+    
 }

@@ -41,9 +41,12 @@ public static class EventReceiverExtensions
     /// <summary>
     /// Registers event receivers based on registered event handlers
     /// </summary>
+    /// <param name="receiverImplementation">Implementation that should be used for found
+    /// <see cref="IEventHandler"/> inheriting classes</param>
+    /// <param name="assemblies">Assemblies that will be searched for classes inheriting <see cref="IEventHandler"/></param>
     /// <returns></returns>
     /// <exception cref="NullReferenceException">Event was not found in specified assemblies for found Receiver</exception>
-    public static IServiceCollection AddEventReceivers(this IServiceCollection services, params Assembly[] assemblies)
+    public static IServiceCollection AddEventReceivers(this IServiceCollection services, Type receiverImplementation, params Assembly[] assemblies)
     {
         var provider = services.BuildServiceProvider();
         
@@ -60,7 +63,7 @@ public static class EventReceiverExtensions
             if (eventType is null)
                 throw new NullReferenceException($"Could not find event type for {eventHandlerType.Name}");
 
-            var receiverType = typeof(EventReceiver<>).MakeGenericType(eventType);
+            var receiverType = receiverImplementation.MakeGenericType(eventType);
 
             Action<IEventReceiver> configureAction;
             using (var scope = provider.CreateScope())
@@ -80,7 +83,19 @@ public static class EventReceiverExtensions
 
         return services;
     }
+    
+    /// <summary>
+    /// Registers event receivers based on registered event handlers
+    /// </summary>
+    /// <param name="assemblies">Assemblies that will be searched for classes inheriting <see cref="IEventHandler"/></param>
+    /// <returns></returns>
+    /// <exception cref="NullReferenceException">Event was not found in specified assemblies for found Receiver</exception>
+    public static IServiceCollection AddEventReceivers(this IServiceCollection services, params Assembly[] assemblies)
+    {
+        return AddEventReceivers(services, typeof(EventReceiver<>), assemblies);
+    }
 
+    
     private static object? InvokeGenericMethod(MethodInfo method, Type genericTypeParameter, params object[] arguments)
     {
         return method.MakeGenericMethod(genericTypeParameter).Invoke(null, arguments);

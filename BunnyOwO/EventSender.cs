@@ -44,16 +44,13 @@ public class EventSender : ISender
         }
         catch (Exception ex)
         {
-            logger.LogError(-1, ex, "RabbitMQClient init fail");
+            logger.LogError(-1, ex, "Cannot initialize RabbitMQClient channel");
         }
         _logger = logger;
     }
 
     public virtual void PublishMessage(string routingKey, object message)
     {
-        if(_channel is null)
-            _logger.LogError("Failed to instantiate channel");
-        
         _logger.LogInformation($"Publishing RabbitMQ message with routing key: {routingKey}...");
 
         string msgJson = JsonSerializer.Serialize(message);

@@ -13,4 +13,15 @@ public static class EventSenderExtensions
         serviceCollection.AddScoped<ISender, EventSender>();
         return serviceCollection;
     }
+    
+    /// <summary>
+    /// Adds sender to service collection
+    /// </summary>
+    /// <returns></returns>
+    public static IServiceCollection AddSender<TSender>(this IServiceCollection serviceCollection)
+        where TSender : class, ISender
+    {
+        serviceCollection.AddScoped<ISender, TSender>();
+        return serviceCollection;
+    }
 }

@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace BunnyOwO.Extensions;
 
-public static class EventBusExtensions
+public static class DependencyInjectionExtensions
 {
     /// <summary>
     /// Adds sender as well as event handlers and receivers using basic RabbitMq setup,

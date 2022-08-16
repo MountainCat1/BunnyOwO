@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package >
   <metadata>
-    <id>BunnyOwO</id>
-    <version>1.0.13</version>
-    <title>BunnyOwO</title>
+    <id>BunnyOwO.FluentValidation</id>
+    <version>1.0.0</version>
+    <title>BunnyOwO.FluentValidation</title>
     <authors>Tomasz Banaś</authors>
     <license type="expression">AGPL-3.0-or-later</license>
     <!-- <icon>icon.png</icon> -->
@@ -16,10 +16,9 @@
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
 
     <dependencies>
-      <dependency id="Microsoft.Extensions.Hosting" version="6.0.1" />
-      <dependency id="Microsoft.Extensions.Logging" version="6.0.0" />
-      <dependency id="RabbitMQ.Client" version="6.4.0" />
+      <dependency id="BunnyOwO" version="1.0.13" />
+      <dependency id="FluentValidation" version="11.2.0" />
     </dependencies>
-    
+
   </metadata>
 </package>

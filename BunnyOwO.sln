@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BunnyOwO", "BunnyOwO\BunnyOwO.csproj", "{4B69E68E-1DDE-4905-8E70-35AF3AF5AAAB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BunnyOwO.FluentValidation", "BunnyOwO.FluentValidation\BunnyOwO.FluentValidation.csproj", "{A81A0989-BF2B-4C6E-80B1-03CCEDF44764}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{4B69E68E-1DDE-4905-8E70-35AF3AF5AAAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B69E68E-1DDE-4905-8E70-35AF3AF5AAAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B69E68E-1DDE-4905-8E70-35AF3AF5AAAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A81A0989-BF2B-4C6E-80B1-03CCEDF44764}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A81A0989-BF2B-4C6E-80B1-03CCEDF44764}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A81A0989-BF2B-4C6E-80B1-03CCEDF44764}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A81A0989-BF2B-4C6E-80B1-03CCEDF44764}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

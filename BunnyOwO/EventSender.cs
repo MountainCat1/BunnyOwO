@@ -59,6 +59,9 @@ public class EventSender : ISender
     {
         _logger.LogInformation($"Publishing RabbitMQ message with routing key: {routingKey}...");
 
+        if(!ValidateEventAsync(@event).Result)
+            return;
+        
         string msgJson = JsonSerializer.Serialize(@event);
         var body = Encoding.UTF8.GetBytes(msgJson);
         

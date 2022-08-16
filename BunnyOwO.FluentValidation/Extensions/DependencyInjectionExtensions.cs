@@ -8,17 +8,6 @@ namespace BunnyOwO.FluentValidation.Extensions;
 public static class DependencyInjectionExtensions
 {
     public static IServiceCollection AddBunnyOwOWithValidation(this IServiceCollection serviceCollection,
-        Type eventHandlersAssemblyMarker,
-        Type eventReceiversAssemblyMarker,
-        params Type[] eventValidatorAssemblyMarkers)
-    {
-        return AddBunnyOwOWithValidation(serviceCollection, 
-            eventHandlersAssemblyMarker.Assembly, 
-            eventReceiversAssemblyMarker.Assembly, 
-            eventValidatorAssemblyMarkers.Select(type => type.Assembly).ToArray());
-    }
-    
-    public static IServiceCollection AddBunnyOwOWithValidation(this IServiceCollection serviceCollection,
         Assembly eventHandlersAssemblyMarker,
         Assembly eventReceiversAssemblyMarker,
         Assembly[] eventValidatorAssemblyMarkers)
@@ -30,6 +19,17 @@ public static class DependencyInjectionExtensions
         serviceCollection.AddEventReceivers(typeof(EventReceiverWithFluentValidation<>), eventReceiversAssemblyMarker);
         
         return serviceCollection;
+    }
+    
+    public static IServiceCollection AddBunnyOwOWithValidation(this IServiceCollection serviceCollection,
+        Type eventHandlersAssemblyMarker,
+        Type eventReceiversAssemblyMarker,
+        params Type[] eventValidatorAssemblyMarkers)
+    {
+        return AddBunnyOwOWithValidation(serviceCollection, 
+            eventHandlersAssemblyMarker.Assembly, 
+            eventReceiversAssemblyMarker.Assembly, 
+            eventValidatorAssemblyMarkers.Select(type => type.Assembly).ToArray());
     }
     
     public static IServiceCollection AddBunnyOwOWithValidation(this IServiceCollection serviceCollection,
@@ -47,12 +47,12 @@ public static class DependencyInjectionExtensions
     {
         var validatorTypes = markerAssembly
             .SelectMany(assembly => assembly.GetTypes())
-            .Where(type => type.IsAssignableTo(typeof(AbstractValidator<>)));
-
+            .Where(type => type.GetInterfaces().Any(x => x == typeof(IValidator)));
+        
         foreach (var validatorType in validatorTypes)
         {
-            var genericArgument = validatorType.GetGenericArguments()[0];
-
+            var genericArgument = validatorType.BaseType.GetGenericArguments()[0];
+            
             var validatorGenericType = typeof(IValidator<>).MakeGenericType(genericArgument);
 
             serviceCollection.AddScoped(validatorGenericType, validatorType);

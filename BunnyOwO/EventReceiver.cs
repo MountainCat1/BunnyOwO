@@ -91,17 +91,28 @@ public class EventReceiver<TEvent> : IEventReceiver<TEvent>
 
         var consumer = new EventingBasicConsumer(_channel);
 
-        consumer.Received += async (model, ea) =>
+        consumer.Received += OnConsumerOnReceived;
+        _channel.BasicConsume(queue: QueueName, consumer: consumer);
+    }
+
+    private async void OnConsumerOnReceived(object model, BasicDeliverEventArgs ea)
+    {
+        var body = ea.Body;
+        var message = Encoding.UTF8.GetString(body.ToArray());
+
+        try
         {
-            var body = ea.Body;
-            var message = Encoding.UTF8.GetString(body.ToArray());
             var result = await ProcessAsync(message);
+
             if (result)
             {
                 _channel.BasicAck(ea.DeliveryTag, false);
             }
-        };
-        _channel.BasicConsume(queue: QueueName, consumer: consumer);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Exception was thrown while processing RabbitMQ message");
+        }
     }
 
     public void DeRegister()

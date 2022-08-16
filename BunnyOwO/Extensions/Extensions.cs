@@ -13,7 +13,7 @@ public static class EventBusExtensions
     /// requires that <see cref="Configuration.RabbitMQConfiguration" /> is configured
     /// </summary>
     /// <returns></returns>
-    public static IServiceCollection AddEventBus(this IServiceCollection serviceCollection,
+    public static IServiceCollection AddBunnyOwO(this IServiceCollection serviceCollection,
         Assembly eventHandlersAssemblyMarker,
         Assembly eventReceiversAssemblyMarker)
     {
@@ -29,7 +29,7 @@ public static class EventBusExtensions
     /// requires that <see cref="Configuration.RabbitMQConfiguration" /> is configured
     /// </summary>
     /// <returns></returns>
-    public static IServiceCollection AddEventBus(this IServiceCollection serviceCollection,
+    public static IServiceCollection AddBunnyOwO(this IServiceCollection serviceCollection,
         Type eventHandlersAssemblyMarker,
         Type eventReceiversAssemblyMarker)
     {
@@ -45,7 +45,7 @@ public static class EventBusExtensions
     /// requires that <see cref="Configuration.RabbitMQConfiguration" /> is configured
     /// </summary>
     /// <returns></returns>
-    public static IServiceCollection AddEventBus(this IServiceCollection serviceCollection,
+    public static IServiceCollection AddBunnyOwO(this IServiceCollection serviceCollection,
         IEnumerable<Type> eventHandlersAssemblyMarkers,
         IEnumerable<Type> eventReceiversAssemblyMarkers)
     {

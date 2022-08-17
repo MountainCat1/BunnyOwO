@@ -111,6 +111,9 @@ public static class EventReceiverExtensions
 
             var constructorInfo = constructors.First();
 
+
+            using var scope = provider.CreateScope();
+            
             var constructorParameters = constructorInfo.GetParameters()
                 .Select(parameterInfo => provider.GetRequiredService(parameterInfo.ParameterType))
                 .ToArray();

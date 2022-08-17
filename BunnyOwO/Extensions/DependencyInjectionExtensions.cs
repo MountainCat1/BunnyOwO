@@ -66,4 +66,15 @@ public static class DependencyInjectionExtensions
 
         return serviceCollection;
     }
+    
+    /// <summary>
+    /// Adds event handlers and receivers using basic RabbitMq setup,
+    /// requires that <see cref="Configuration.RabbitMQConfiguration" /> is configured
+    /// </summary>
+    /// <returns></returns>
+    public static IServiceCollection AddEventHandlersAndReceivers(this IServiceCollection serviceCollection,
+        params Type[] eventHandlersAssemblyMarkers)
+    {
+        return AddEventHandlersAndReceivers(serviceCollection, eventHandlersAssemblyMarkers.AsEnumerable());
+    }
 }

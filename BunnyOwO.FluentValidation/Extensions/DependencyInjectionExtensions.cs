@@ -7,6 +7,44 @@ namespace BunnyOwO.FluentValidation.Extensions;
 
 public static class DependencyInjectionExtensions
 {
+    public static IServiceCollection AddEventHandlersReceiversWithValidation(this IServiceCollection serviceCollection,
+        Type eventHandlersAssemblyMarker,
+        params Type[] eventValidatorAssemblyMarkers)
+    {
+        return AddEventHandlersReceiversWithValidation(serviceCollection, 
+            eventHandlersAssemblyMarker.Assembly, 
+            eventValidatorAssemblyMarkers.Select(x => x.Assembly).ToArray());
+    }
+    
+    public static IServiceCollection AddEventHandlersReceiversWithValidation(this IServiceCollection serviceCollection,
+        Assembly eventHandlersAssemblyMarker,
+        Assembly[] eventValidatorAssemblyMarkers)
+    {
+        serviceCollection.AddValidators(eventValidatorAssemblyMarkers);
+        
+        serviceCollection.AddEventHandlers(eventHandlersAssemblyMarker);
+        serviceCollection.AddEventReceivers(typeof(EventReceiverWithFluentValidation<>), eventHandlersAssemblyMarker);
+
+        return serviceCollection;
+    }
+    
+    public static IServiceCollection AddSenderWithValidation(this IServiceCollection serviceCollection,
+        Type[] eventValidatorAssemblyMarkers)
+    {
+        return AddSenderWithValidation(serviceCollection,
+            eventValidatorAssemblyMarkers.Select(x => x.Assembly).ToArray());
+    }
+    
+    public static IServiceCollection AddSenderWithValidation(this IServiceCollection serviceCollection,
+        Assembly[] eventValidatorAssemblyMarkers)
+    {
+        serviceCollection.AddValidators(eventValidatorAssemblyMarkers);
+        
+        serviceCollection.AddSender<EventSenderWithFluentValidation>();
+        
+        return serviceCollection;
+    }
+
     public static IServiceCollection AddBunnyOwOWithValidation(this IServiceCollection serviceCollection,
         Assembly eventHandlersAssemblyMarker,
         Assembly[] eventValidatorAssemblyMarkers)

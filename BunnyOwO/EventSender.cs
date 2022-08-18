@@ -20,12 +20,13 @@ public interface ISender
 /// <summary>
 /// Basic implementation of <see cref="ISender"/>
 /// </summary>
-public class EventSender : ISender
+public class EventSender : ISender, IDisposable
 {
     private readonly RabbitMQConfiguration _rabbitMqConfiguration;
     private readonly ILogger<EventSender> _logger;
     
     private readonly IModel _channel;
+    private readonly IConnection _connection;
 
     public EventSender(IOptions<RabbitMQConfiguration> rabbitMqConfiguration, ILogger<EventSender> logger)
     {
@@ -41,8 +42,8 @@ public class EventSender : ISender
                 UserName = _rabbitMqConfiguration.UserName,
                 VirtualHost = _rabbitMqConfiguration.VirtualHost
             };
-            var connection = factory.CreateConnection();
-            _channel = connection.CreateModel();
+            _connection = factory.CreateConnection();
+            _channel = _connection.CreateModel();
             
             if(_channel is null)
                 _logger.LogError("Failed to instantiate channel");
@@ -77,5 +78,10 @@ public class EventSender : ISender
     {
         return true;
     }
-    
+
+    public void Dispose()
+    {
+        _channel.Dispose();
+        _connection.Dispose();
+    }
 }

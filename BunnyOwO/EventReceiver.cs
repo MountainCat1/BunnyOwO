@@ -27,7 +27,7 @@ public interface IEventReceiver<TEvent> : IEventReceiver
     Task<bool> ValidateEventAsync(TEvent @event);
 }
 
-public class EventReceiver<TEvent> : IEventReceiver<TEvent> 
+public class EventReceiver<TEvent> : IEventReceiver<TEvent>, IDisposable
     where TEvent : class, IEvent
 {
     private readonly IConnection _connection;
@@ -123,6 +123,13 @@ public class EventReceiver<TEvent> : IEventReceiver<TEvent>
     public Task StopAsync(CancellationToken cancellationToken)
     {
         _connection.Close();
+        Dispose();
         return Task.CompletedTask;
+    }
+
+    public void Dispose()
+    {
+        _connection.Dispose();
+        _channel.Dispose();
     }
 }

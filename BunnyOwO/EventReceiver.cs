@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using BunnyOwO.Configuration;
 using BunnyOwO.Exceptions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -21,29 +22,29 @@ public interface IEventReceiver : IHostedService
     void Register();
     void DeRegister();
 }
-public interface IEventReceiver<TEvent> : IEventReceiver
+public interface IEventReceiver<TEvent> : IEventReceiver, IDisposable
     where TEvent : IEvent
 {
     Task<bool> ValidateEventAsync(TEvent @event);
 }
 
-public class EventReceiver<TEvent> : IEventReceiver<TEvent>, IDisposable
+public class EventReceiver<TEvent> : IEventReceiver<TEvent>
     where TEvent : class, IEvent
 {
     private readonly IConnection _connection;
     private readonly IModel _channel;
     
     private readonly ILogger<EventReceiver<TEvent> > _logger;
-    private readonly IEventHandler<TEvent> _eventHandler;
+    private readonly IServiceCollection _services;
 
     public EventReceiver(
         IOptions<RabbitMQConfiguration> rabbitMqConfiguration, 
         ILogger<EventReceiver<TEvent>> logger,
-        IEventHandler<TEvent> eventHandler)
+        IServiceCollection services)
     {
         _logger = logger;
-        _eventHandler = eventHandler;
-        
+        _services = services;
+
         var factory = new ConnectionFactory()
         {
             HostName = rabbitMqConfiguration.Value.HostName,
@@ -76,7 +77,11 @@ public class EventReceiver<TEvent> : IEventReceiver<TEvent>, IDisposable
         if (!await ValidateEventAsync(@event))
             throw new EventValidationException("Event validation failed");
 
-        return await _eventHandler.HandleAsync(@event);
+        await using (var scope = _services.BuildServiceProvider().CreateAsyncScope())
+        {
+            var eventHandler = scope.ServiceProvider.GetService<IEventHandler<TEvent>>();
+            return await eventHandler.HandleAsync(@event);
+        }
     }
     
 
@@ -90,7 +95,7 @@ public class EventReceiver<TEvent> : IEventReceiver<TEvent>, IDisposable
         _logger.LogInformation($"Registering {GetType().Name}...");
 
         var consumer = new EventingBasicConsumer(_channel);
-
+        
         consumer.Received += OnConsumerOnReceived;
         _channel.BasicConsume(queue: QueueName, consumer: consumer);
     }
@@ -122,7 +127,9 @@ public class EventReceiver<TEvent> : IEventReceiver<TEvent>, IDisposable
     
     public Task StopAsync(CancellationToken cancellationToken)
     {
+        _channel.Close();
         _connection.Close();
+
         Dispose();
         return Task.CompletedTask;
     }

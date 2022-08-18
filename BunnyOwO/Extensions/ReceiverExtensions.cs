@@ -115,7 +115,9 @@ public static class EventReceiverExtensions
             using var scope = provider.CreateScope();
             
             var constructorParameters = constructorInfo.GetParameters()
-                .Select(parameterInfo => scope.ServiceProvider.GetRequiredService(parameterInfo.ParameterType))
+                .Select(parameterInfo => parameterInfo.ParameterType == typeof(IServiceCollection)
+                    ? services
+                    : scope.ServiceProvider.GetRequiredService(parameterInfo.ParameterType))
                 .ToArray();
 
             var receiver = (T)constructorInfo.Invoke(constructorParameters);

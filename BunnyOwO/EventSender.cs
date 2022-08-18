@@ -71,6 +71,9 @@ public class EventSender : ISender, IDisposable
             routingKey: routingKey,
             basicProperties: basicProperties,
             body: body);
+        
+        _channel.Close();
+        _connection.Close();
     }
 
     public virtual async Task<bool> ValidateEventAsync<TEvent>(TEvent @event)

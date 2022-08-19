@@ -136,7 +136,7 @@ public class EventReceiver<TEvent> : IEventReceiver<TEvent>
 
     public void Dispose()
     {
-        _connection.Dispose();
-        _channel.Dispose();
+        _connection?.Dispose();
+        _channel?.Dispose();
     }
 }

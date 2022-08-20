@@ -10,7 +10,7 @@ using RabbitMQ.Client;
 namespace BunnyOwO;
 public interface ISender
 {
-    void PublishEvent<TEvent>(string routingKey, string exchange, TEvent @event, IBasicProperties? basicProperties = null)
+    void PublishEvent<TEvent>(TEvent @event, string routingKey, string exchange, IBasicProperties? basicProperties = null)
         where TEvent : IEvent;
 
     Task<bool> ValidateEventAsync<TEvent>(TEvent @event)
@@ -55,7 +55,7 @@ public class EventSender : ISender, IDisposable
         _logger = logger;
     }
 
-    public virtual void PublishEvent<TEvent>(string routingKey, string exchange, TEvent @event,
+    public virtual void PublishEvent<TEvent>(TEvent @event, string routingKey, string exchange,
         IBasicProperties? basicProperties = null)
         where TEvent : IEvent
     {

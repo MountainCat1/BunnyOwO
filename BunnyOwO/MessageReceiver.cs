@@ -15,31 +15,31 @@ using RabbitMQ.Client.Events;
 namespace BunnyOwO;
 
 
-public interface IEventReceiver : IHostedService
+public interface IMessageReceiver : IHostedService
 {
     string QueueName { get; set; }
     Task<bool> ProcessAsync(string message);
     void Register();
     void DeRegister();
 }
-public interface IEventReceiver<TEvent> : IEventReceiver, IDisposable
-    where TEvent : IEvent
+public interface IMessageReceiver<TEvent> : IMessageReceiver, IDisposable
+    where TEvent : IMessage
 {
     Task<bool> ValidateEventAsync(TEvent @event);
 }
 
-public class EventReceiver<TEvent> : IEventReceiver<TEvent>
-    where TEvent : class, IEvent
+public class MessageReceiver<TEvent> : IMessageReceiver<TEvent>
+    where TEvent : class, IMessage
 {
     private readonly IConnection _connection;
     private readonly IModel _channel;
     
-    private readonly ILogger<EventReceiver<TEvent> > _logger;
+    private readonly ILogger<MessageReceiver<TEvent> > _logger;
     private readonly IServiceCollection _services;
 
-    public EventReceiver(
+    public MessageReceiver(
         IOptions<RabbitMQConfiguration> rabbitMqConfiguration, 
-        ILogger<EventReceiver<TEvent>> logger,
+        ILogger<MessageReceiver<TEvent>> logger,
         IServiceCollection services)
     {
         _logger = logger;
@@ -75,11 +75,11 @@ public class EventReceiver<TEvent> : IEventReceiver<TEvent>
             throw new SerializationException($"Cannot deserialize broker message to {typeof(TEvent).Name}");
 
         if (!await ValidateEventAsync(@event))
-            throw new EventValidationException("Event validation failed");
+            throw new MessageValidationException("Event validation failed");
 
         await using (var scope = _services.BuildServiceProvider().CreateAsyncScope())
         {
-            var eventHandler = scope.ServiceProvider.GetService<IEventHandler<TEvent>>();
+            var eventHandler = scope.ServiceProvider.GetService<IMessageHandler<TEvent>>();
             return await eventHandler.HandleAsync(@event);
         }
     }

@@ -9,7 +9,7 @@ namespace BunnyOwO.Extensions;
 public static class DependencyInjectionExtensions
 {
     /// <summary>
-    /// Adds sender as well as event handlers and receivers using basic RabbitMq setup,
+    /// Adds sender as well as message handlers and receivers using basic RabbitMq setup,
     /// requires that <see cref="Configuration.RabbitMQConfiguration" /> is configured
     /// </summary>
     /// <returns></returns>
@@ -24,7 +24,7 @@ public static class DependencyInjectionExtensions
     }
     
     /// <summary>
-    /// Adds sender as well as event handlers and receivers using basic RabbitMq setup,
+    /// Adds sender as well as message handlers and receivers using basic RabbitMq setup,
     /// requires that <see cref="Configuration.RabbitMQConfiguration" /> is configured
     /// </summary>
     /// <returns></returns>
@@ -39,7 +39,7 @@ public static class DependencyInjectionExtensions
     }
     
     /// <summary>
-    /// Adds sender as well as event handlers and receivers using basic RabbitMq setup,
+    /// Adds sender as well as message handlers and receivers using basic RabbitMq setup,
     /// requires that <see cref="Configuration.RabbitMQConfiguration" /> is configured
     /// </summary>
     /// <returns></returns>
@@ -54,7 +54,7 @@ public static class DependencyInjectionExtensions
     }
     
     /// <summary>
-    /// Adds event handlers and receivers using basic RabbitMq setup,
+    /// Adds message handlers and receivers using basic RabbitMq setup,
     /// requires that <see cref="Configuration.RabbitMQConfiguration" /> is configured
     /// </summary>
     /// <returns></returns>
@@ -68,7 +68,7 @@ public static class DependencyInjectionExtensions
     }
     
     /// <summary>
-    /// Adds event handlers and receivers using basic RabbitMq setup,
+    /// Adds message handlers and receivers using basic RabbitMq setup,
     /// requires that <see cref="Configuration.RabbitMQConfiguration" /> is configured
     /// </summary>
     /// <returns></returns>

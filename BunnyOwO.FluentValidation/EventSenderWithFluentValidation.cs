@@ -6,11 +6,11 @@ using Microsoft.Extensions.Options;
 
 namespace BunnyOwO.FluentValidation;
 
-public class EventSenderWithFluentValidation : EventSender
+public class MessageSenderWithFluentValidation : MessageSender
 {
-    private IServiceProvider _serviceProvider;
+    private readonly IServiceProvider _serviceProvider;
     
-    public EventSenderWithFluentValidation(IOptions<RabbitMQConfiguration> rabbitMqConfiguration, ILogger<EventSender> logger, IServiceProvider serviceProvider) : base(rabbitMqConfiguration, logger)
+    public MessageSenderWithFluentValidation(IOptions<RabbitMQConfiguration> rabbitMqConfiguration, ILogger<MessageSender> logger, IServiceProvider serviceProvider) : base(rabbitMqConfiguration, logger)
     {
         _serviceProvider = serviceProvider;
     }

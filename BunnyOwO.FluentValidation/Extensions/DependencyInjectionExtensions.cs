@@ -23,7 +23,7 @@ public static class DependencyInjectionExtensions
         serviceCollection.AddValidators(eventValidatorAssemblyMarkers);
         
         serviceCollection.AddEventHandlers(eventHandlersAssemblyMarker);
-        serviceCollection.AddEventReceivers(typeof(EventReceiverWithFluentValidation<>), eventHandlersAssemblyMarker);
+        serviceCollection.AddEventReceivers(typeof(MessageReceiverWithFluentValidation<>), eventHandlersAssemblyMarker);
 
         return serviceCollection;
     }
@@ -40,7 +40,7 @@ public static class DependencyInjectionExtensions
     {
         serviceCollection.AddValidators(eventValidatorAssemblyMarkers);
         
-        serviceCollection.AddSender<EventSenderWithFluentValidation>();
+        serviceCollection.AddSender<MessageSenderWithFluentValidation>();
         
         return serviceCollection;
     }
@@ -51,9 +51,9 @@ public static class DependencyInjectionExtensions
     {
         serviceCollection.AddValidators(eventValidatorAssemblyMarkers);
         
-        serviceCollection.AddSender<EventSenderWithFluentValidation>();
+        serviceCollection.AddSender<MessageSenderWithFluentValidation>();
         serviceCollection.AddEventHandlers(eventHandlersAssemblyMarker);
-        serviceCollection.AddEventReceivers(typeof(EventReceiverWithFluentValidation<>), eventHandlersAssemblyMarker);
+        serviceCollection.AddEventReceivers(typeof(MessageReceiverWithFluentValidation<>), eventHandlersAssemblyMarker);
         
         return serviceCollection;
     }

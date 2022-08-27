@@ -2,15 +2,15 @@
 
 namespace BunnyOwO.Extensions;
 
-public static class EventSenderExtensions
+public static class MessageSenderExtensions
 {
     /// <summary>
-    /// Adds <see cref="ISender"/> to service collection
+    /// Adds <see cref="IMessageSender"/> to service collection
     /// </summary>
     /// <returns></returns>
     public static IServiceCollection AddSender(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddScoped<ISender, EventSender>();
+        serviceCollection.AddScoped<IMessageSender, MessageSender>();
         return serviceCollection;
     }
     
@@ -19,9 +19,9 @@ public static class EventSenderExtensions
     /// </summary>
     /// <returns></returns>
     public static IServiceCollection AddSender<TSender>(this IServiceCollection serviceCollection)
-        where TSender : class, ISender
+        where TSender : class, IMessageSender
     {
-        serviceCollection.AddScoped<ISender, TSender>();
+        serviceCollection.AddScoped<IMessageSender, TSender>();
         return serviceCollection;
     }
 }

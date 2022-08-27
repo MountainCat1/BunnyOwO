@@ -1,5 +1,5 @@
 ﻿namespace BunnyOwO;
 
-public interface IEvent
+public interface IMessage
 {
 }

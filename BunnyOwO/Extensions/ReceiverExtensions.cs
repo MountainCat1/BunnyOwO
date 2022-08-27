@@ -8,14 +8,14 @@ namespace BunnyOwO.Extensions;
 public static class EventReceiverExtensions
 {
     /// <summary>
-    /// Adds <see cref="IEventReceiver"/> to service collection
+    /// Adds <see cref="IMessageReceiver"/> to service collection
     /// </summary>
-    /// <param name="configure">Method used to configure <see cref="IEventReceiver"/></param>
-    /// <typeparam name="T"><see cref="IEventHandler"/> implementation</typeparam>
+    /// <param name="configure">Method used to configure <see cref="IMessageReceiver"/></param>
+    /// <typeparam name="T"><see cref="IMessageHandler"/> implementation</typeparam>
     /// <returns></returns>
     public static IServiceCollection AddEventReceiver<T>(this IServiceCollection services,
         Action<T> configure)
-        where T : class, IEventReceiver
+        where T : class, IMessageReceiver
     {
         services.AddHostedService(provider =>
         {
@@ -39,11 +39,11 @@ public static class EventReceiverExtensions
     }
 
     /// <summary>
-    /// Registers event receivers based on registered event handlers
+    /// Registers message receivers based on registered event handlers
     /// </summary>
     /// <param name="receiverImplementation">Implementation that should be used for found
-    /// <see cref="IEventHandler"/> inheriting classes</param>
-    /// <param name="assemblies">Assemblies that will be searched for classes inheriting <see cref="IEventHandler"/></param>
+    /// <see cref="IMessageHandler"/> inheriting classes</param>
+    /// <param name="assemblies">Assemblies that will be scanned for classes inheriting <see cref="IMessageHandler"/></param>
     /// <returns></returns>
     /// <exception cref="NullReferenceException">Event was not found in specified assemblies for found Receiver</exception>
     public static IServiceCollection AddEventReceivers(this IServiceCollection services, Type receiverImplementation, params Assembly[] assemblies)
@@ -52,12 +52,12 @@ public static class EventReceiverExtensions
         
         var eventHandlerTypes = assemblies
             .SelectMany(assembly => assembly.GetTypes())
-            .Where(type => type.IsClass && type.IsAssignableTo(typeof(IEventHandler)));
+            .Where(type => type.IsClass && type.IsAssignableTo(typeof(IMessageHandler)));
 
         foreach (var eventHandlerType in eventHandlerTypes)
         {
             var eventType = eventHandlerType.GetInterfaces()
-                .FirstOrDefault(type => type.GetGenericTypeDefinition() == typeof(IEventHandler<>))
+                .FirstOrDefault(type => type.GetGenericTypeDefinition() == typeof(IMessageHandler<>))
                 ?.GetGenericArguments().First();
 
             if (eventType is null)
@@ -65,13 +65,13 @@ public static class EventReceiverExtensions
 
             var receiverType = receiverImplementation.MakeGenericType(eventType);
 
-            Action<IEventReceiver> configureAction;
+            Action<IMessageReceiver> configureAction;
             using (var scope = provider.CreateScope())
             {
                 var eventHandlerInterfaceType = eventHandlerType.GetInterfaces()
-                    .FirstOrDefault(type => type.GetGenericTypeDefinition() == typeof(IEventHandler<>));
+                    .FirstOrDefault(type => type.GetGenericTypeDefinition() == typeof(IMessageHandler<>));
                 
-                configureAction = ((IEventHandler)scope.ServiceProvider.GetRequiredService(eventHandlerInterfaceType!)!)
+                configureAction = ((IMessageHandler)scope.ServiceProvider.GetRequiredService(eventHandlerInterfaceType!)!)
                     .ConfigureReceiver;
             }
 
@@ -85,14 +85,14 @@ public static class EventReceiverExtensions
     }
     
     /// <summary>
-    /// Registers event receivers based on registered event handlers
+    /// Registers event receivers based on registered message handlers
     /// </summary>
-    /// <param name="assemblies">Assemblies that will be searched for classes inheriting <see cref="IEventHandler"/></param>
+    /// <param name="assemblies">Assemblies that will be scanned for classes inheriting <see cref="IMessageHandler"/></param>
     /// <returns></returns>
     /// <exception cref="NullReferenceException">Event was not found in specified assemblies for found Receiver</exception>
     public static IServiceCollection AddEventReceivers(this IServiceCollection services, params Assembly[] assemblies)
     {
-        return AddEventReceivers(services, typeof(EventReceiver<>), assemblies);
+        return AddEventReceivers(services, typeof(MessageReceiver<>), assemblies);
     }
 
     
@@ -102,7 +102,7 @@ public static class EventReceiverExtensions
     }
     
     public static void AddReceiverHostedService<T>(IServiceCollection services, Action<T>? configure = null)
-        where T : class, IEventReceiver
+        where T : class, IMessageReceiver
     {
         services.AddHostedService(provider =>
         {

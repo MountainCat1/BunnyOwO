@@ -11,8 +11,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="BunnyOwO" Version="1.0.16" />
       <PackageReference Include="FluentValidation" Version="11.2.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\BunnyOwO\BunnyOwO.csproj" />
     </ItemGroup>
 
 </Project>

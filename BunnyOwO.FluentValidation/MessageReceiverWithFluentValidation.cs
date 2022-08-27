@@ -6,18 +6,13 @@ using Microsoft.Extensions.Options;
 
 namespace BunnyOwO.FluentValidation;
 
-public class EventReceiverWithFluentValidation<TEvent> : EventReceiver<TEvent> where TEvent : class, IEvent
+public class MessageReceiverWithFluentValidation<TEvent> : MessageReceiver<TEvent> where TEvent : class, IMessage
 {
-    private IServiceProvider _serviceProvider;
-
-    public EventReceiverWithFluentValidation(IOptions<RabbitMQConfiguration> rabbitMqConfiguration, 
-        ILogger<EventReceiver<TEvent>> logger,
-        IEventHandler<TEvent> eventHandler,  
-        IServiceProvider serviceProvider) : base(rabbitMqConfiguration, logger, eventHandler)
+    private readonly IServiceProvider _serviceProvider;
+    public MessageReceiverWithFluentValidation(IOptions<RabbitMQConfiguration> rabbitMqConfiguration, ILogger<MessageReceiver<TEvent>> logger, IServiceCollection services, IServiceProvider serviceProvider) : base(rabbitMqConfiguration, logger, services)
     {
         _serviceProvider = serviceProvider;
     }
-
 
     public override async Task<bool> ValidateEventAsync(TEvent @event)
     {
@@ -28,4 +23,5 @@ public class EventReceiverWithFluentValidation<TEvent> : EventReceiver<TEvent> w
         
         return (await eventValidator.ValidateAsync(@event)).IsValid;
     }
+
 }

@@ -8,27 +8,27 @@ using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 
 namespace BunnyOwO;
-public interface ISender
+public interface IMessageSender
 {
     void PublishEvent<TEvent>(TEvent @event, string routingKey, string exchange, IBasicProperties? basicProperties = null)
-        where TEvent : IEvent;
+        where TEvent : IMessage;
 
     Task<bool> ValidateEventAsync<TEvent>(TEvent @event)
-        where TEvent : IEvent;
+        where TEvent : IMessage;
 }
 
 /// <summary>
-/// Basic implementation of <see cref="ISender"/>
+/// Basic implementation of <see cref="IMessageSender"/>
 /// </summary>
-public class EventSender : ISender, IDisposable
+public class MessageSender : IMessageSender, IDisposable
 {
     private readonly RabbitMQConfiguration _rabbitMqConfiguration;
-    private readonly ILogger<EventSender> _logger;
+    private readonly ILogger<MessageSender> _logger;
     
     private readonly IModel _channel;
     private readonly IConnection _connection;
 
-    public EventSender(IOptions<RabbitMQConfiguration> rabbitMqConfiguration, ILogger<EventSender> logger)
+    public MessageSender(IOptions<RabbitMQConfiguration> rabbitMqConfiguration, ILogger<MessageSender> logger)
     {
         _rabbitMqConfiguration = rabbitMqConfiguration.Value;
         _logger = logger;
@@ -57,12 +57,12 @@ public class EventSender : ISender, IDisposable
 
     public virtual void PublishEvent<TEvent>(TEvent @event, string routingKey, string exchange,
         IBasicProperties? basicProperties = null)
-        where TEvent : IEvent
+        where TEvent : IMessage
     {
         _logger.LogInformation($"Publishing RabbitMQ message with routing key: {routingKey}...");
 
         if (!ValidateEventAsync(@event).Result)
-            throw new EventValidationException("Event validation failed");
+            throw new MessageValidationException("Message validation failed");
         
         string msgJson = JsonSerializer.Serialize(@event);
         var body = Encoding.UTF8.GetBytes(msgJson);
@@ -77,7 +77,7 @@ public class EventSender : ISender, IDisposable
     }
 
     public virtual async Task<bool> ValidateEventAsync<TEvent>(TEvent @event)
-        where TEvent : IEvent
+        where TEvent : IMessage
     {
         return true;
     }

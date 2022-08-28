@@ -13,7 +13,7 @@ public static class EventReceiverExtensions
     /// <param name="configure">Method used to configure <see cref="IMessageReceiver"/></param>
     /// <typeparam name="T"><see cref="IMessageHandler"/> implementation</typeparam>
     /// <returns></returns>
-    public static IServiceCollection AddEventReceiver<T>(this IServiceCollection services,
+    public static IServiceCollection AddMessageReceiver<T>(this IServiceCollection services,
         Action<T> configure)
         where T : class, IMessageReceiver
     {
@@ -46,7 +46,7 @@ public static class EventReceiverExtensions
     /// <param name="assemblies">Assemblies that will be scanned for classes inheriting <see cref="IMessageHandler"/></param>
     /// <returns></returns>
     /// <exception cref="NullReferenceException">Event was not found in specified assemblies for found Receiver</exception>
-    public static IServiceCollection AddEventReceivers(this IServiceCollection services, Type receiverImplementation, params Assembly[] assemblies)
+    public static IServiceCollection AddMessageReceivers(this IServiceCollection services, Type receiverImplementation, params Assembly[] assemblies)
     {
         var provider = services.BuildServiceProvider();
         
@@ -85,14 +85,14 @@ public static class EventReceiverExtensions
     }
     
     /// <summary>
-    /// Registers event receivers based on registered message handlers
+    /// Registers message receivers based on registered message handlers
     /// </summary>
     /// <param name="assemblies">Assemblies that will be scanned for classes inheriting <see cref="IMessageHandler"/></param>
     /// <returns></returns>
     /// <exception cref="NullReferenceException">Event was not found in specified assemblies for found Receiver</exception>
-    public static IServiceCollection AddEventReceivers(this IServiceCollection services, params Assembly[] assemblies)
+    public static IServiceCollection AddMessageReceivers(this IServiceCollection services, params Assembly[] assemblies)
     {
-        return AddEventReceivers(services, typeof(MessageReceiver<>), assemblies);
+        return AddMessageReceivers(services, typeof(MessageReceiver<>), assemblies);
     }
 
     

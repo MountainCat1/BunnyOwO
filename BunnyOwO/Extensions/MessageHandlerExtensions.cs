@@ -12,7 +12,7 @@ public static class MessageHandlerExtensions
     /// </summary>
     /// <returns></returns>
     /// <exception cref="NullReferenceException">Found message handler doesn't inherit <see cref="IMessageHandler"/></exception>
-    public static IServiceCollection AddEventHandlers(this IServiceCollection services, params Assembly[] assemblies)
+    public static IServiceCollection AddMessageHandlers(this IServiceCollection services, params Assembly[] assemblies)
     {
         var eventHandlerTypes = assemblies
             .SelectMany(assembly => assembly.GetTypes())

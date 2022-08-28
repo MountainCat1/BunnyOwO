@@ -8,7 +8,7 @@ public static class MessageSenderExtensions
     /// Adds <see cref="IMessageSender"/> to service collection
     /// </summary>
     /// <returns></returns>
-    public static IServiceCollection AddSender(this IServiceCollection serviceCollection)
+    public static IServiceCollection AddMessageSender(this IServiceCollection serviceCollection)
     {
         serviceCollection.AddScoped<IMessageSender, MessageSender>();
         return serviceCollection;
@@ -18,7 +18,7 @@ public static class MessageSenderExtensions
     /// Adds sender to service collection
     /// </summary>
     /// <returns></returns>
-    public static IServiceCollection AddSender<TSender>(this IServiceCollection serviceCollection)
+    public static IServiceCollection AddMessageSender<TSender>(this IServiceCollection serviceCollection)
         where TSender : class, IMessageSender
     {
         serviceCollection.AddScoped<IMessageSender, TSender>();

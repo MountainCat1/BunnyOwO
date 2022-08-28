@@ -16,9 +16,9 @@ public static class DependencyInjectionExtensions
     public static IServiceCollection AddBunnyOwO(this IServiceCollection serviceCollection,
         Assembly eventHandlersAssemblyMarker)
     {
-        serviceCollection.AddSender();
-        serviceCollection.AddEventHandlers(eventHandlersAssemblyMarker);
-        serviceCollection.AddEventReceivers(eventHandlersAssemblyMarker);
+        serviceCollection.AddMessageSender();
+        serviceCollection.AddMessageHandlers(eventHandlersAssemblyMarker);
+        serviceCollection.AddMessageReceivers(eventHandlersAssemblyMarker);
         
         return serviceCollection;
     }
@@ -31,9 +31,9 @@ public static class DependencyInjectionExtensions
     public static IServiceCollection AddBunnyOwO(this IServiceCollection serviceCollection,
         Type eventHandlersAssemblyMarker)
     {
-        serviceCollection.AddSender();
-        serviceCollection.AddEventHandlers(eventHandlersAssemblyMarker.Assembly);
-        serviceCollection.AddEventReceivers(eventHandlersAssemblyMarker.Assembly);
+        serviceCollection.AddMessageSender();
+        serviceCollection.AddMessageHandlers(eventHandlersAssemblyMarker.Assembly);
+        serviceCollection.AddMessageReceivers(eventHandlersAssemblyMarker.Assembly);
 
         return serviceCollection;
     }
@@ -46,9 +46,9 @@ public static class DependencyInjectionExtensions
     public static IServiceCollection AddBunnyOwO(this IServiceCollection serviceCollection,
         IEnumerable<Type> eventHandlersAssemblyMarkers)
     {
-        serviceCollection.AddSender();
-        serviceCollection.AddEventHandlers(eventHandlersAssemblyMarkers.Select(type => type.Assembly).ToArray());
-        serviceCollection.AddEventReceivers(eventHandlersAssemblyMarkers.Select(type => type.Assembly).ToArray());
+        serviceCollection.AddMessageSender();
+        serviceCollection.AddMessageHandlers(eventHandlersAssemblyMarkers.Select(type => type.Assembly).ToArray());
+        serviceCollection.AddMessageReceivers(eventHandlersAssemblyMarkers.Select(type => type.Assembly).ToArray());
 
         return serviceCollection;
     }
@@ -58,11 +58,11 @@ public static class DependencyInjectionExtensions
     /// requires that <see cref="Configuration.RabbitMQConfiguration" /> is configured
     /// </summary>
     /// <returns></returns>
-    public static IServiceCollection AddEventHandlersAndReceivers(this IServiceCollection serviceCollection,
+    public static IServiceCollection AddMessageHandlersAndReceivers(this IServiceCollection serviceCollection,
         IEnumerable<Type> eventHandlersAssemblyMarkers)
     {
-        serviceCollection.AddEventHandlers(eventHandlersAssemblyMarkers.Select(type => type.Assembly).ToArray());
-        serviceCollection.AddEventReceivers(eventHandlersAssemblyMarkers.Select(type => type.Assembly).ToArray());
+        serviceCollection.AddMessageHandlers(eventHandlersAssemblyMarkers.Select(type => type.Assembly).ToArray());
+        serviceCollection.AddMessageReceivers(eventHandlersAssemblyMarkers.Select(type => type.Assembly).ToArray());
 
         return serviceCollection;
     }
@@ -72,9 +72,9 @@ public static class DependencyInjectionExtensions
     /// requires that <see cref="Configuration.RabbitMQConfiguration" /> is configured
     /// </summary>
     /// <returns></returns>
-    public static IServiceCollection AddEventHandlersAndReceivers(this IServiceCollection serviceCollection,
+    public static IServiceCollection AddMessageHandlersAndReceivers(this IServiceCollection serviceCollection,
         params Type[] eventHandlersAssemblyMarkers)
     {
-        return AddEventHandlersAndReceivers(serviceCollection, eventHandlersAssemblyMarkers.AsEnumerable());
+        return AddMessageHandlersAndReceivers(serviceCollection, eventHandlersAssemblyMarkers.AsEnumerable());
     }
 }

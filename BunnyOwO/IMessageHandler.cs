@@ -13,13 +13,13 @@ public interface IMessageHandler
         // Intentionally empty
     }
 }
-public interface IMessageHandler<in TEvent> : IMessageHandler
-    where TEvent : class, IMessage
+public interface IMessageHandler<in TMessage> : IMessageHandler
+    where TMessage : class, IMessage
 {
     /// <summary>
     /// Handle incoming broker <see cref="IMessage"/>
     /// </summary>
-    /// <param name="event">Incoming event</param>
+    /// <param name="message">Incoming event</param>
     /// <returns>Should event be consumed</returns>
-    public Task<bool> HandleAsync(TEvent @event);
+    public Task<bool> HandleAsync(TMessage message);
 }

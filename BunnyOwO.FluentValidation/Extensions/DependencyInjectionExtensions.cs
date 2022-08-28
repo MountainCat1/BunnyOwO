@@ -7,16 +7,16 @@ namespace BunnyOwO.FluentValidation.Extensions;
 
 public static class DependencyInjectionExtensions
 {
-    public static IServiceCollection AddEventHandlersReceiversWithValidation(this IServiceCollection serviceCollection,
+    public static IServiceCollection AddMessageHandlersReceiversWithValidation(this IServiceCollection serviceCollection,
         Type eventHandlersAssemblyMarker,
         params Type[] eventValidatorAssemblyMarkers)
     {
-        return AddEventHandlersReceiversWithValidation(serviceCollection, 
+        return AddMessageHandlersReceiversWithValidation(serviceCollection, 
             eventHandlersAssemblyMarker.Assembly, 
             eventValidatorAssemblyMarkers.Select(x => x.Assembly).ToArray());
     }
     
-    public static IServiceCollection AddEventHandlersReceiversWithValidation(this IServiceCollection serviceCollection,
+    public static IServiceCollection AddMessageHandlersReceiversWithValidation(this IServiceCollection serviceCollection,
         Assembly eventHandlersAssemblyMarker,
         Assembly[] eventValidatorAssemblyMarkers)
     {
@@ -28,14 +28,14 @@ public static class DependencyInjectionExtensions
         return serviceCollection;
     }
     
-    public static IServiceCollection AddSenderWithValidation(this IServiceCollection serviceCollection,
+    public static IServiceCollection AddMessageSenderWithValidation(this IServiceCollection serviceCollection,
         Type[] eventValidatorAssemblyMarkers)
     {
-        return AddSenderWithValidation(serviceCollection,
+        return AddMessageSenderWithValidation(serviceCollection,
             eventValidatorAssemblyMarkers.Select(x => x.Assembly).ToArray());
     }
     
-    public static IServiceCollection AddSenderWithValidation(this IServiceCollection serviceCollection,
+    public static IServiceCollection AddMessageSenderWithValidation(this IServiceCollection serviceCollection,
         Assembly[] eventValidatorAssemblyMarkers)
     {
         serviceCollection.AddValidators(eventValidatorAssemblyMarkers);

@@ -18,14 +18,14 @@ namespace BunnyOwO;
 public interface IMessageReceiver : IHostedService
 {
     string QueueName { get; set; }
-    Task<bool> ProcessAsync(string message);
+    Task<bool> ProcessAsync(string messageJson);
     void Register();
     void DeRegister();
 }
-public interface IMessageReceiver<TEvent> : IMessageReceiver, IDisposable
-    where TEvent : IMessage
+public interface IMessageReceiver<TMessage> : IMessageReceiver, IDisposable
+    where TMessage : IMessage
 {
-    Task<bool> ValidateEventAsync(TEvent @event);
+    Task<bool> ValidateEventAsync(TMessage message);
 }
 
 public class MessageReceiver<TEvent> : IMessageReceiver<TEvent>
@@ -65,27 +65,27 @@ public class MessageReceiver<TEvent> : IMessageReceiver<TEvent>
     public string QueueName{ get; set; }
     
     // How to process messages
-    public virtual async Task<bool> ProcessAsync(string message)
+    public virtual async Task<bool> ProcessAsync(string messageJson)
     {
-        _logger.LogInformation($"Receiving message: {message}");
+        _logger.LogInformation($"Receiving message: {messageJson}");
         
-        TEvent? @event = JsonSerializer.Deserialize<TEvent>(message);
+        TEvent? message = JsonSerializer.Deserialize<TEvent>(messageJson);
         
-        if (@event == null)
+        if (message == null)
             throw new SerializationException($"Cannot deserialize broker message to {typeof(TEvent).Name}");
 
-        if (!await ValidateEventAsync(@event))
+        if (!await ValidateEventAsync(message))
             throw new MessageValidationException("Event validation failed");
 
         await using (var scope = _services.BuildServiceProvider().CreateAsyncScope())
         {
-            var eventHandler = scope.ServiceProvider.GetService<IMessageHandler<TEvent>>();
-            return await eventHandler.HandleAsync(@event);
+            var messageHandler = scope.ServiceProvider.GetService<IMessageHandler<TEvent>>();
+            return await messageHandler.HandleAsync(message);
         }
     }
     
 
-    public virtual async Task<bool> ValidateEventAsync(TEvent @event)
+    public virtual async Task<bool> ValidateEventAsync(TEvent message)
     {
         return true;
     }

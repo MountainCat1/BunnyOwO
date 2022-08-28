@@ -14,14 +14,14 @@ public class MessageReceiverWithFluentValidation<TEvent> : MessageReceiver<TEven
         _serviceProvider = serviceProvider;
     }
 
-    public override async Task<bool> ValidateEventAsync(TEvent @event)
+    public override async Task<bool> ValidateEventAsync(TEvent message)
     {
         var eventValidator = _serviceProvider.GetService<IValidator<TEvent>>();
 
         if (eventValidator is null)
-            return await base.ValidateEventAsync(@event);
+            return await base.ValidateEventAsync(message);
         
-        return (await eventValidator.ValidateAsync(@event)).IsValid;
+        return (await eventValidator.ValidateAsync(message)).IsValid;
     }
 
 }

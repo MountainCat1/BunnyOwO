@@ -10,11 +10,11 @@ using RabbitMQ.Client;
 namespace BunnyOwO;
 public interface IMessageSender
 {
-    void PublishEvent<TEvent>(TEvent @event, string routingKey, string exchange, IBasicProperties? basicProperties = null)
-        where TEvent : IMessage;
+    void Publish<TMessage>(TMessage message, string routingKey, string exchange, IBasicProperties? basicProperties = null)
+        where TMessage : IMessage;
 
-    Task<bool> ValidateEventAsync<TEvent>(TEvent @event)
-        where TEvent : IMessage;
+    Task<bool> ValidateEventAsync<TMessage>(TMessage message)
+        where TMessage : IMessage;
 }
 
 /// <summary>
@@ -55,16 +55,16 @@ public class MessageSender : IMessageSender, IDisposable
         _logger = logger;
     }
 
-    public virtual void PublishEvent<TEvent>(TEvent @event, string routingKey, string exchange,
+    public virtual void Publish<TMessage>(TMessage message, string routingKey, string exchange,
         IBasicProperties? basicProperties = null)
-        where TEvent : IMessage
+        where TMessage : IMessage
     {
         _logger.LogInformation($"Publishing RabbitMQ message with routing key: {routingKey}...");
 
-        if (!ValidateEventAsync(@event).Result)
+        if (!ValidateEventAsync(message).Result)
             throw new MessageValidationException("Message validation failed");
         
-        string msgJson = JsonSerializer.Serialize(@event);
+        string msgJson = JsonSerializer.Serialize(message);
         var body = Encoding.UTF8.GetBytes(msgJson);
         
         _channel.BasicPublish(exchange: exchange,
@@ -76,8 +76,8 @@ public class MessageSender : IMessageSender, IDisposable
         _connection.Close();
     }
 
-    public virtual async Task<bool> ValidateEventAsync<TEvent>(TEvent @event)
-        where TEvent : IMessage
+    public virtual async Task<bool> ValidateEventAsync<TMessage>(TMessage message)
+        where TMessage : IMessage
     {
         return true;
     }
